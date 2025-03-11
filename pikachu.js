@@ -20,8 +20,8 @@ class Pikachu {
     }
     
     updatePosition() {
-        this.element.style.left = `${this.x}px`;
-        this.element.style.top = `${this.y}px`;
+        // Use transform instead of left/top for better performance
+        this.element.style.transform = `translate3d(${this.x}px, ${this.y}px, 0) scale(2)`;
     }
     
     move() {

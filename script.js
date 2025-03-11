@@ -48,8 +48,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         updatePosition() {
-            this.element.style.left = `${this.x}px`;
-            this.element.style.top = `${this.y}px`;
+            // Use transform instead of left/top for better performance
+            this.element.style.transform = `translate3d(${this.x}px, ${this.y}px, 0)`;
         }
         
         move() {
@@ -86,6 +86,9 @@ document.addEventListener('DOMContentLoaded', () => {
         balls.push(new Ball(i, colors[i % colors.length]));
     }
     
+    // Optimization: Pre-calculate squared radius for faster collision checks
+    const ballRadiusSquared = Math.pow(ballSize / 2, 2);
+    
     // Check for collisions between balls
     function checkCollisions() {
         // Check collisions between balls
@@ -101,10 +104,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Calculate distance between centers
                 const dx = b2.x - b1.x;
                 const dy = b2.y - b1.y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                // Optimization: Use squared distance to avoid expensive sqrt operation
+                const distanceSquared = dx * dx + dy * dy;
+                const minDistanceSquared = Math.pow(b1.radius + b2.radius, 2);
                 
                 // Check if balls are colliding
-                if (distance < b1.radius + b2.radius) {
+                if (distanceSquared < minDistanceSquared) {
+                    // Calculate actual distance only when needed
+                    const distance = Math.sqrt(distanceSquared);
+                    
                     // Calculate collision normal
                     const nx = dx / distance;
                     const ny = dy / distance;
@@ -156,9 +165,14 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const dx = pikachuData.x - ballData.x;
             const dy = pikachuData.y - ballData.y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
             
-            if (distance < ballData.radius + pikachuData.radius) {
+            // Optimization: Use squared distance
+            const distanceSquared = dx * dx + dy * dy;
+            const minDistanceSquared = Math.pow(ballData.radius + pikachuData.radius, 2);
+            
+            if (distanceSquared < minDistanceSquared) {
+                const distance = Math.sqrt(distanceSquared);
+                
                 // Simple bounce effect for Pikachu collisions
                 const nx = dx / distance;
                 const ny = dy / distance;
@@ -178,9 +192,14 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const dxSquirtle = squirtleData.x - ballData.x;
             const dySquirtle = squirtleData.y - ballData.y;
-            const distanceSquirtle = Math.sqrt(dxSquirtle * dxSquirtle + dySquirtle * dySquirtle);
             
-            if (distanceSquirtle < ballData.radius + squirtleData.radius) {
+            // Optimization: Use squared distance
+            const distanceSquirtleSquared = dxSquirtle * dxSquirtle + dySquirtle * dySquirtle;
+            const minDistanceSquirtleSquared = Math.pow(ballData.radius + squirtleData.radius, 2);
+            
+            if (distanceSquirtleSquared < minDistanceSquirtleSquared) {
+                const distanceSquirtle = Math.sqrt(distanceSquirtleSquared);
+                
                 // Simple bounce effect for Squirtle collisions
                 const nx = dxSquirtle / distanceSquirtle;
                 const ny = dySquirtle / distanceSquirtle;
@@ -202,9 +221,14 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const dx = squirtleData.x - pikachuData.x;
         const dy = squirtleData.y - pikachuData.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
         
-        if (distance < pikachuData.radius + squirtleData.radius) {
+        // Optimization: Use squared distance
+        const distanceSquared = dx * dx + dy * dy;
+        const minDistanceSquared = Math.pow(pikachuData.radius + squirtleData.radius, 2);
+        
+        if (distanceSquared < minDistanceSquared) {
+            const distance = Math.sqrt(distanceSquared);
+            
             // Calculate collision normal
             const nx = dx / distance;
             const ny = dy / distance;
@@ -225,30 +249,52 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
-    // Animation loop
-    function animate() {
-        // Move all balls
-        for (const ball of balls) {
-            ball.move();
+    // Track last animation timestamp for consistent animation speed
+    let lastTimestamp = 0;
+    
+    // Animation loop with timestamp for better timing control
+    function animate(timestamp) {
+        // Calculate delta time for smoother animation
+        if (!lastTimestamp) lastTimestamp = timestamp;
+        const deltaTime = timestamp - lastTimestamp;
+        lastTimestamp = timestamp;
+        
+        // Skip frames if tab is inactive (deltaTime too large)
+        if (deltaTime < 100) {  // Only animate if reasonable frame time
+            // Move all balls
+            for (const ball of balls) {
+                ball.move();
+            }
+            
+            // Move Pikachu
+            pikachu.move();
+            
+            // Move Squirtle
+            squirtle.move();
+            
+            // Check for collisions
+            checkCollisions();
         }
-        
-        // Move Pikachu
-        pikachu.move();
-        
-        // Move Squirtle
-        squirtle.move();
-        
-        // Check for collisions
-        checkCollisions();
         
         requestAnimationFrame(animate);
     }
     
     // Start the animation
-    animate();
+    requestAnimationFrame(animate);
     
-    // Handle window resize to update box dimensions
-    window.addEventListener('resize', () => {
+    // Debounce function to limit expensive operations
+    function debounce(func, wait) {
+        let timeout;
+        return function() {
+            const context = this;
+            const args = arguments;
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(context, args), wait);
+        };
+    }
+    
+    // Handle window resize to update box dimensions (debounced)
+    window.addEventListener('resize', debounce(() => {
         const newBoxRect = box.getBoundingClientRect();
         
         // Update box dimensions
@@ -257,6 +303,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Update Pikachu's box dimensions
         pikachu.boxRect = newBoxRect;
+        
+        // Update Squirtle's box dimensions
+        squirtle.boxRect = newBoxRect;
         
         // Ensure balls stay within the new boundaries
         balls.forEach(ball => {
@@ -269,5 +318,10 @@ document.addEventListener('DOMContentLoaded', () => {
         pikachu.x = Math.min(pikachu.x, boxRect.width - pikachu.width);
         pikachu.y = Math.min(pikachu.y, boxRect.height - pikachu.height);
         pikachu.updatePosition();
-    });
+        
+        // Ensure Squirtle stays within the new boundaries
+        squirtle.x = Math.min(squirtle.x, boxRect.width - squirtle.width);
+        squirtle.y = Math.min(squirtle.y, boxRect.height - squirtle.height);
+        squirtle.updatePosition();
+    }, 100));
 }); 

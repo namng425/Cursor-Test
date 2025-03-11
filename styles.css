@@ -31,6 +31,8 @@ body {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Deeper shadow for dark theme */
     will-change: transform;
     transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
 }
 
 .ball {
@@ -38,10 +40,13 @@ body {
     height: 40px;
     border-radius: 50%;
     position: absolute;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4); /* Enhanced shadow for dark theme */
-    transition: transform 0.1s ease-out;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     will-change: transform;
+    transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
+    top: 0;
+    left: 0;
 }
 
 .pikachu {
@@ -52,13 +57,14 @@ body {
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    transform: scale(2);
     image-rendering: pixelated;
     z-index: 10;
-    /* Optimize the glow effect */
-    filter: drop-shadow(0 0 5px rgba(255, 255, 0, 0.3));
+    filter: drop-shadow(0 0 3px rgba(255, 255, 0, 0.3));
     will-change: transform;
+    -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
+    top: 0;
+    left: 0;
 }
 
 .squirtle {
@@ -69,11 +75,26 @@ body {
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    transform: scale(2);
     image-rendering: pixelated;
     z-index: 10;
-    /* Add a blue glow effect for Squirtle */
-    filter: drop-shadow(0 0 5px rgba(0, 191, 255, 0.4));
+    filter: drop-shadow(0 0 3px rgba(0, 191, 255, 0.3));
     will-change: transform;
+    -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
+    top: 0;
+    left: 0;
+}
+
+.pokemon-title {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #FFDE00; /* Pokémon yellow */
+    text-shadow: 
+        -2px -2px 0 #3B4CCA, /* Pokémon blue outline */
+        2px -2px 0 #3B4CCA,
+        -2px 2px 0 #3B4CCA,
+        2px 2px 0 #3B4CCA;
+    font-size: 2.5rem;
+    font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
+    letter-spacing: 1px;
 } 
