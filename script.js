@@ -5,6 +5,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const ballCount = 6; // Number of balls
     const balls = [];
     
+    // Velocity control elements
+    const velocitySlider = document.getElementById('velocity-slider');
+    const velocityValue = document.getElementById('velocity-value');
+    const resetVelocityBtn = document.getElementById('reset-velocity');
+    
+    // Velocity multiplier - we'll use this to adjust speeds
+    let velocityMultiplier = 1.0;
+    
+    // Store original speeds for each ball
+    const originalSpeeds = [];
+    
     // Create Pikachu
     const pikachu = new Pikachu(box);
     
@@ -37,6 +48,10 @@ document.addEventListener('DOMContentLoaded', () => {
             this.speedX = (Math.random() * 3 + 2) * (Math.random() > 0.5 ? 1 : -1);
             this.speedY = (Math.random() * 3 + 2) * (Math.random() > 0.5 ? 1 : -1);
             
+            // Store original speeds
+            this.originalSpeedX = this.speedX;
+            this.originalSpeedY = this.speedY;
+            
             // Mass (for physics calculations)
             this.mass = 1;
             
@@ -45,6 +60,13 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Add to the box
             box.appendChild(this.element);
+            
+            // Store original speeds in the array
+            originalSpeeds.push({
+                id: this.id,
+                speedX: this.speedX,
+                speedY: this.speedY
+            });
         }
         
         updatePosition() {
@@ -53,9 +75,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         move() {
-            // Update position based on speed
-            this.x += this.speedX;
-            this.y += this.speedY;
+            // Update position based on speed adjusted by the velocity multiplier
+            this.x += this.speedX * velocityMultiplier;
+            this.y += this.speedY * velocityMultiplier;
             
             // Bounce off the walls
             if (this.x <= 0 || this.x >= boxRect.width - ballSize) {
@@ -78,6 +100,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 y: this.y + ballSize / 2,
                 radius: ballSize / 2
             };
+        }
+        
+        // Update ball velocity based on the velocity multiplier
+        updateVelocity(multiplier) {
+            this.speedX = this.originalSpeedX * multiplier;
+            this.speedY = this.originalSpeedY * multiplier;
+        }
+        
+        // Reset ball velocity to original speeds
+        resetVelocity() {
+            this.speedX = this.originalSpeedX;
+            this.speedY = this.originalSpeedY;
         }
     }
     
@@ -281,6 +315,18 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Start the animation
     requestAnimationFrame(animate);
+    
+    // Velocity control event listeners
+    velocitySlider.addEventListener('input', function() {
+        velocityMultiplier = parseFloat(this.value);
+        velocityValue.textContent = velocityMultiplier.toFixed(1) + 'x';
+    });
+    
+    resetVelocityBtn.addEventListener('click', function() {
+        velocityMultiplier = 1.0;
+        velocitySlider.value = 1.0;
+        velocityValue.textContent = '1.0x';
+    });
     
     // Debounce function to limit expensive operations
     function debounce(func, wait) {

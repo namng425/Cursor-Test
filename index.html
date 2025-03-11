@@ -3,12 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bouncing Balls Animation</title>
+    <title>Pokémon Ball Animator</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <h1 class="pokemon-title">Pokémon Ball Animator</h1>
+        <div class="controls">
+            <div class="control-group">
+                <label for="velocity-slider">Ball Speed:</label>
+                <input type="range" id="velocity-slider" min="0.5" max="2.0" step="0.1" value="1.0">
+                <span id="velocity-value">1.0x</span>
+            </div>
+            <button id="reset-velocity">Reset Speed</button>
+        </div>
         <div id="box">
             <!-- Balls and Pokémon will be created dynamically with JavaScript -->
         </div>
