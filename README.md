@@ -2,6 +2,12 @@
 
 A fun, interactive web animation featuring bouncing balls and Pokémon characters (Pikachu and Squirtle) that move around and collide in a confined space, all rendered with optimized physics and performance.
 
+## Live Demo
+
+**Check out the live demo:** [https://namng425.github.io/Cursor-Test/](https://namng425.github.io/Cursor-Test/)
+
+Experience the animation with optimized physics in action! The demo is hosted on GitHub Pages and shows all the features described below.
+
 ## Description
 
 This project creates a visually engaging animation where colorful balls and Pokémon characters bounce around within a container. The animation demonstrates advanced physics principles including impulse-based collision detection and response between multiple objects of varying mass and elasticity.
