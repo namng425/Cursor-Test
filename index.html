@@ -3,57 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>** COOL POKEMON ZONE ** Best viewed in Netscape 4.0!</title>
+    <title>My Pokémon Xanga</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap">
 </head>
 <body>
-    <div class="container">
-        <div class="construction-banner">
-            <img src="https://web.archive.org/web/20091021005812/http://www.geocities.com/hk/roysprite/construct.gif" alt="Under Construction">
-            <img src="https://web.archive.org/web/20091020115545/http://hk.geocities.com/irisyuen11/pokemon.gif" alt="Pokemon Gif">
-            <img src="https://web.archive.org/web/20091021005812/http://www.geocities.com/hk/roysprite/construct.gif" alt="Under Construction">
+    <div id="xanga-wrapper">
+        <div id="xanga-header">
+            <div class="blog-title">~ * PokéMaster's Xanga * ~</div>
+            <div class="blog-subtitle">...where pokémon dreams come true...</div>
         </div>
 
-        <marquee scrollamount="5" behavior="alternate" class="welcome-banner">
-            <span class="blink">***WELCOME TO MY AWESOME POKEMON PAGE***</span>
-        </marquee>
-
-        <h1 class="pokemon-title">Pokémon Ball Animator</h1>
-
-        <div class="sign-guestbook">
-            <a href="#" onclick="alert('Guestbook feature coming soon!')">
-                <img src="https://web.archive.org/web/20091027041820/http://www.geocities.com/Tokyo/Bay/6822/guesticon.gif" alt="Sign My Guestbook">
-                SIGN MY GUESTBOOK!
-            </a>
-        </div>
-
-        <div class="controls">
-            <div class="control-group">
-                <label for="velocity-slider">Ball Speed:</label>
-                <input type="range" id="velocity-slider" min="0.5" max="2.0" step="0.1" value="1.0">
-                <span id="velocity-value">1.0x</span>
+        <div id="xanga-main">
+            <div id="xanga-content">
+                <div class="entry">
+                    <div class="entry-header">
+                        <div class="entry-title">My Pokémon Animation</div>
+                        <div class="entry-date">04.25.2006 - 9:37pm</div>
+                    </div>
+                    <div class="entry-content">
+                        <p>hey everyone! i made this cool pokémon animation. check it out below and leave me a comment to let me know what you think! ^_^</p>
+                        
+                        <div class="controls">
+                            <div class="control-group">
+                                <label for="velocity-slider">Ball Speed:</label>
+                                <input type="range" id="velocity-slider" min="0.5" max="2.0" step="0.1" value="1.0">
+                                <span id="velocity-value">1.0x</span>
+                            </div>
+                            <button id="reset-velocity">Reset Speed</button>
+                        </div>
+                        
+                        <div id="box">
+                            <!-- Balls and Pokémon will be created dynamically with JavaScript -->
+                        </div>
+                        
+                        <p class="entry-footer">♥ posted by PokéMaster @ 9:37pm | 8 comments | 3 eProps</p>
+                    </div>
+                </div>
+                
+                <div class="comments-section">
+                    <div class="comments-header">Comments (8)</div>
+                    <div class="comment">
+                        <div class="comment-avatar">
+                            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png" alt="PikaFan">
+                        </div>
+                        <div class="comment-content">
+                            <div class="comment-author">PikaFan92</div>
+                            <div class="comment-text">this is so cool! how did you make the pokemon bounce? </div>
+                            <div class="comment-date">04.25.2006 | eProps: 1</div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <button id="reset-velocity">Reset Speed</button>
-        </div>
-        <div id="box">
-            <!-- Balls and Pokémon will be created dynamically with JavaScript -->
-        </div>
+            
+            <div id="xanga-sidebar">
+                <div class="profile-box">
+                    <div class="profile-pic">
+                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png" alt="Profile Pic">
+                    </div>
+                    <div class="profile-name">PokéMaster</div>
+                    <div class="profile-status">"catching 'em all since 1998"</div>
+                </div>
+                
+                <div class="sidebar-box">
+                    <div class="sidebar-title">About Me</div>
+                    <div class="sidebar-content">
+                        <p>Age: 16</p>
+                        <p>Location: Pallet Town</p>
+                        <p>Mood: ^_^ excited</p>
+                    </div>
+                </div>
 
-        <div class="counter">
-            <p>You are visitor number:</p>
-            <img src="https://web.archive.org/web/20091026152422/http://hk.geocities.com/paradise_jennifer/counter.gif" alt="Hit Counter">
+                <div class="sidebar-box">
+                    <div class="sidebar-title">Currently Playing</div>
+                    <div class="music-player">
+                        <div class="song-info">
+                            <p class="song-title">♪ Pokémon Theme ♪</p>
+                            <p class="song-artist">Jason Paige</p>
+                        </div>
+                        <div class="player-controls">
+                            [play] [pause] [stop]
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="sidebar-box">
+                    <div class="sidebar-title">My Subscriptions</div>
+                    <div class="subscription-list">
+                        <div class="subscription">AshFromPallet</div>
+                        <div class="subscription">MistyMermaid</div>
+                        <div class="subscription">BrockRocks</div>
+                        <div class="subscription">TeamRocket</div>
+                    </div>
+                </div>
+                
+                <div class="sidebar-box">
+                    <div class="sidebar-title">Counter</div>
+                    <div class="counter">
+                        Pageviews: 4,219
+                    </div>
+                </div>
+            </div>
         </div>
         
-        <div class="buttons">
-            <a href="#"><img src="https://web.archive.org/web/20091026220832/http://www.geocities.com/Area51/Dimension/9330/email.gif" alt="Email Me"></a>
-            <a href="#"><img src="https://web.archive.org/web/20091027114708/http://www.geocities.com/TimesSquare/Battlefield/2929/linkus.gif" alt="Link to Us"></a>
-            <a href="#"><img src="https://web.archive.org/web/20091027114708/http://www.geocities.com/TimesSquare/Battlefield/2929/netscape.gif" alt="Best viewed in Netscape"></a>
-        </div>
-
-        <div class="footer">
-            <marquee direction="right" scrollamount="3">
-                This page is Copyright © 1998-1999 PokeMASTER. All rights reserved. Last updated: 03/11/1999
-            </marquee>
+        <div id="xanga-footer">
+            <p>© 2006 PokéMaster | Made with Xanga | <a href="#">Link to me</a> | <a href="#">Subscribe</a></p>
         </div>
     </div>
     <script src="pikachu.js"></script>
