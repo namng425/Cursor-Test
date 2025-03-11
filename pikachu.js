@@ -5,6 +5,10 @@ class Pikachu {
         this.element = document.createElement('div');
         this.element.className = 'pikachu';
         
+        // Pre-create transform string for better performance
+        this.transformPrefix = 'translate3d(';
+        this.transformSuffix = 'px, 0) scale(2)';
+        
         // Set initial position
         this.width = 80;
         this.height = 80;
@@ -15,13 +19,35 @@ class Pikachu {
         this.speedX = (Math.random() * 2 + 1) * (Math.random() > 0.5 ? 1 : -1);
         this.speedY = (Math.random() * 2 + 1) * (Math.random() > 0.5 ? 1 : -1);
         
+        // Store original speeds for velocity adjustments
+        this.originalSpeedX = this.speedX;
+        this.originalSpeedY = this.speedY;
+        
+        // Set mass for physics calculations (slightly higher than balls because Pikachu is larger)
+        this.mass = 1.5;
+        
+        // Set restitution (bounciness) property
+        this.restitution = 0.85;
+        
+        // For smoother animation
+        this.prevX = this.x;
+        this.prevY = this.y;
+        
+        // Add to box with proper positioning
         this.updatePosition();
         box.appendChild(this.element);
     }
     
     updatePosition() {
-        // Use transform instead of left/top for better performance
-        this.element.style.transform = `translate3d(${this.x}px, ${this.y}px, 0) scale(2)`;
+        // Only update the DOM if position has changed significantly (reduce reflows)
+        if (Math.abs(this.x - this.prevX) > 0.1 || Math.abs(this.y - this.prevY) > 0.1) {
+            // Use template literals only once per frame for better performance
+            const transform = `${this.transformPrefix}${this.x}px, ${this.y}${this.transformSuffix}`;
+            this.element.style.transform = transform;
+            
+            this.prevX = this.x;
+            this.prevY = this.y;
+        }
     }
     
     move() {
@@ -29,16 +55,26 @@ class Pikachu {
         this.x += this.speedX;
         this.y += this.speedY;
         
-        // Bounce off the walls
-        if (this.x <= 0 || this.x >= this.boxRect.width - this.width) {
-            this.speedX *= -1;
-            this.x = Math.max(0, Math.min(this.x, this.boxRect.width - this.width));
+        // Bounce off the walls with proper physics
+        if (this.x <= 0) {
+            this.x = 0;
+            this.speedX = Math.abs(this.speedX) * this.restitution;
+        } else if (this.x >= this.boxRect.width - this.width) {
+            this.x = this.boxRect.width - this.width;
+            this.speedX = -Math.abs(this.speedX) * this.restitution;
         }
         
-        if (this.y <= 0 || this.y >= this.boxRect.height - this.height) {
-            this.speedY *= -1;
-            this.y = Math.max(0, Math.min(this.y, this.boxRect.height - this.height));
+        if (this.y <= 0) {
+            this.y = 0;
+            this.speedY = Math.abs(this.speedY) * this.restitution;
+        } else if (this.y >= this.boxRect.height - this.height) {
+            this.y = this.boxRect.height - this.height;
+            this.speedY = -Math.abs(this.speedY) * this.restitution;
         }
+        
+        // Apply a very small amount of friction/damping
+        this.speedX *= 0.998;
+        this.speedY *= 0.998;
         
         this.updatePosition();
     }
@@ -50,5 +86,18 @@ class Pikachu {
             y: this.y + this.height / 2,
             radius: Math.min(this.width, this.height) / 2
         };
+    }
+    
+    // Apply an impulse for collision response
+    applyImpulse(impulseX, impulseY) {
+        this.speedX += impulseX / this.mass;
+        this.speedY += impulseY / this.mass;
+    }
+    
+    // Update Pikachu velocity based on the velocity multiplier
+    updateVelocity(multiplier) {
+        // Apply the multiplier to the original speeds
+        this.speedX = this.originalSpeedX * multiplier;
+        this.speedY = this.originalSpeedY * multiplier;
     }
 } 

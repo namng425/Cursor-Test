@@ -4,8 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Pokémon Xanga</title>
+    <!-- Preload critical resources -->
+    <link rel="preload" href="styles.css" as="style">
+    <link rel="preload" href="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png" as="image">
+    <link rel="preload" href="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/7.png" as="image">
+    
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap">
+    
+    <!-- Meta tags for better indexing and sharing -->
+    <meta name="description" content="A nostalgic Pokémon-themed Xanga blog with interactive animations">
+    <meta name="theme-color" content="#6699cc">
 </head>
 <body>
     <div id="xanga-wrapper">
@@ -110,8 +119,10 @@
             <p>© 2006 PokéMaster | Made with Xanga | <a href="#">Link to me</a> | <a href="#">Subscribe</a></p>
         </div>
     </div>
-    <script src="pikachu.js"></script>
-    <script src="squirtle.js"></script>
-    <script src="script.js"></script>
+    
+    <!-- Load JavaScript with defer to improve page load performance -->
+    <script src="pikachu.js" defer></script>
+    <script src="squirtle.js" defer></script>
+    <script src="script.js" defer></script>
 </body>
 </html> 
